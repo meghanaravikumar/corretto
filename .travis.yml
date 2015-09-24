@@ -1,0 +1,10 @@
+language: java
+
+env:
+  global:
+    - secure: "eHWfygJIfPCzq/0EWtPoZNLqH+ovb4ne00olMuTkml9vF7CKsfjB7JczHHPRcydUzNGeTwFFloq9cagkfH5V0ldZ7KeWvLqJ9oKZDO8sWr2prm8kpiAPghXMxnWAoTlOs0HhtyggXKzbNu4xaMrb/LispUBCiMZk3pUJCs+EvRo="
+    - secure: "R8+9dlFCexT72CeBMYXPvZHxukZ6u22NDqhF3frKsKE/UsUPTSggQZCpOiM2ToW6TQ/DgvxGxeIM/UOhT57Dwb/eU3G3Fs/Jg0yAbubj5lAOXJQ0MdlcpuyW/w29JJAu5jgQ5TmQWJUNz7Umx6B0sZSvPncyErwk+ZrD7+1jm+k="
+
+after_success:
+  - python scripts/addServer.py
+  - mvn clean deploy --settings ~/.m2/mySettings.xml
