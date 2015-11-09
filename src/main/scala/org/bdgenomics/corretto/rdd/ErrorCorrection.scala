@@ -438,6 +438,8 @@ private[corretto] class ErrorCorrection extends Serializable with Logging {
         if (array(idx) >= phredAsInt) {
           dropCount
         } else {
+          println(idx)
+          println(array.length)
           if (idx != array.length){
             dropTest(idx + increment, dropCount + 1)
           }
