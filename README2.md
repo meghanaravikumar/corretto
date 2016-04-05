@@ -1,4 +1,4 @@
-Welcome to Corretto! Now that the excitement has subsided- here are a couple of things you'll need to know to understand this project within Adam. 
+Welcome to Corretto- a denovo error correction program! Now that the excitement has subsided- here are a couple of things you'll need to know to understand this project within Adam. 
 What you'll need to be able to run Corretto:
 1) Maven
 2) Spark
