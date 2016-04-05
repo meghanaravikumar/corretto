@@ -9,7 +9,7 @@ Now that you're ready to use this amazing piece of code- here's the basic input 
 ./bin/corretto-submit [INPUT_FILE] [OUTPUT_FILE]
 
 The input file is a file of reads in any format that is supported by ADAM.
-The output file will be a parquet file containing the corrected reads. The parquet file can also be outputted in any format that Adam supports.
+The output file will be a parquet file containing the corrected reads. The parquet file can also be outputted in any format that Adam supports. For more information on ADAM input/outputs, please see: https://github.com/meghanaravikumar/adam/blob/master/README.md 
 
 Now you might be wondering- my that's aamazing but what does corretto actually do?
 Given a set of reads, corretto goes in and detects bases that are faulty, corrects them, and returns the new and improved set of reads which can now be aligned with a higher accuracy than alignment perfromed without this type of error base fixing. 
