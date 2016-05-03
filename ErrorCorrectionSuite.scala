@@ -32,14 +32,16 @@ class ErrorCorrectionSuite extends CorrettoFunSuite {
 
   def fpCompare(a: Double, b: Double, epsilon: Double = 1e-3): Boolean = abs(a - b) < epsilon
 
-  ignore("correct a read from a mouse") {
+  ignore("correct reads from a mouse") { //needs to be a sparkTest -- having issues calling Corretto
     // Convert the file in
     val readsFilepath = ClassLoader.getSystemClassLoader.getResource("mouse_chrM.sam").getFile
 
-    val read: AlignmentRecord = sc.loadAlignments(readsFilepath).first
+    val reads = sc.loadAlignments(readsFilepath) //sc defined by spark fun suite
+
+    Corretto(Array(readsFilepath, "./output.adam"))
   }
 
-  ignore("correct an error in a single read") { //test passes
+  test("correct an error in a single read") { //test passes
     val ec = new ErrorCorrection
 
     // seed a random variable
@@ -89,7 +91,7 @@ class ErrorCorrectionSuite extends CorrettoFunSuite {
     assert(correctedRead.getSequence.toString === ref)
   }
 
-  ignore("correct an G/C error in a single read") { //test passes
+  test("correct an G/C error in a single read") { //test passes
     val ec = new ErrorCorrection
 
     // seed a random variable
