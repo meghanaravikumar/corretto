@@ -446,8 +446,8 @@ private[corretto] class ErrorCorrection extends Serializable with Logging {
         }
         if (array(idx) >= phredAsInt) {
           return dropCount;
-        } 
-        dropTest(idx + increment, dropCount + 1)
+        }
+      dropTest(idx + increment, dropCount + 1)
 
           }
           
