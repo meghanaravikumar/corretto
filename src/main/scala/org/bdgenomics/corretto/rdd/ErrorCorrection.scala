@@ -118,6 +118,7 @@ private[corretto] object ErrorCorrection extends Logging {
 
     // correct the reads
     val fixPhred = (PhredUtils.successProbabilityToPhred(fixingThreshold) + 33).toChar
+
     val correctedReads = cutReads.map(ec.correctRead(_,
       fixingThreshold,
       fixPhred,
@@ -236,11 +237,11 @@ private[corretto] class ErrorCorrection extends Serializable with Logging {
     val readProbabilities = new Array[Array[Double]](readLength)
 
     (0 until readLength).foreach(i => {
-      readProbabilities(i) = Array(1.0, 1.0, 1.0, 1.0)
+      readProbabilities(i) = Array(1.0, 1.0, 1.0, 1.0) //initializes everything to p=1
 
       // we only do a probability update if requested
       if (i >= start && i <= end) {
-        val startIdx = if (i == 0) {
+        val startIdx = if (i == 0) { //starts probabilites at 0 
           0
         } else {
           max(i - kmerLength + 1, 0)
@@ -260,6 +261,7 @@ private[corretto] class ErrorCorrection extends Serializable with Logging {
 
     // build probabilistic sequence and return
     ProbabilisticSequence(readProbabilities)
+
   }
 
   /**
@@ -304,15 +306,10 @@ private[corretto] class ErrorCorrection extends Serializable with Logging {
         // unpack this position
         val ((probabilities, originalBase), position) = toCheck
 
-        // we want to try the highest probability base
-        val maxIdx = probabilities.indexOf(probabilities.max)
 
-        // if this base is greater than the substitution probability,
-        // we try the change
-        if (probabilities(maxIdx) < fixingThreshold) {
-          // if our current top probability doesn't meet the fixing threshold, we can return
-          pSeq
-        } else {
+        // we want to try the highest probability base
+        val maxIdx = probabilities.indexOf(probabilities.max) //finds base index of max probability  -- ISSUES WITH CALCULATING PROBABLITLIES? 
+
           // build the new sequence
           val newBase = intToBase(maxIdx)
           val testSequence = seq.take(position) + newBase + seq.drop(position + 1)
@@ -366,7 +363,7 @@ private[corretto] class ErrorCorrection extends Serializable with Logging {
 
           // recurse, and try the next fix candidate
           tryFix(newCPos, newPSeq, newSeq, newPRead, newSub)
-        }
+        //} //closes else statement
       }
     }
 
@@ -376,7 +373,11 @@ private[corretto] class ErrorCorrection extends Serializable with Logging {
         .zip(read)
         .map(p => {
           val (pArray, base) = p
-          pArray(baseToInt(base))
+          if (baseToInt(base) == 4){
+            0.25
+          } else{
+            pArray(baseToInt(base))
+          }
         }).reduce(_ * _)
     }
 
@@ -393,7 +394,11 @@ private[corretto] class ErrorCorrection extends Serializable with Logging {
       .filter(vk => {
       val ((probabilities, base), _) = vk
 
-      probabilities(baseToInt(base)) < fixingThreshold
+      if (baseToInt(base) == 4){
+        0.25 < fixingThreshold
+      }else{
+        probabilities(baseToInt(base)) < fixingThreshold
+      }
     })
 
     // try to fix the read
@@ -433,17 +438,22 @@ private[corretto] class ErrorCorrection extends Serializable with Logging {
         (0, 1)
       }
 
+
       @tailrec def dropTest(idx: Int,
                             dropCount: Int): Int = {
-        if (array(idx) >= phredAsInt) {
-          dropCount
-        } else {
-          dropTest(idx + increment, dropCount + 1)
+        if (idx >= array.length || idx < 0) {
+          return dropCount;
         }
-      }
+        if (array(idx) >= phredAsInt) {
+          return dropCount;
+        }
+      dropTest(idx + increment, dropCount + 1)
 
-      dropTest(startIdx, 0)
-    }
+          }
+          
+      dropTest(startIdx, 0) 
+}
+    
 
     // trim ends off of read, if they are below the fixing threshold
     val trimStart = dropLength(newQuals, false)
