@@ -1,12 +1,15 @@
 Welcome to Corretto- a denovo error correction program! Now that the excitement has subsided- here are a couple of things you'll need to know to understand this project within Adam. 
 What you'll need to be able to run Corretto:
-1) Maven
-2) Spark
-3) Adam
-4) Corretto
+* Maven
+* Spark
+* Adam
+* Corretto
 
 Now that you're ready to use this amazing piece of code- here's the basic input for Corretto:
+
+```
 ./bin/corretto-submit [INPUT_FILE] [OUTPUT_FILE]
+```
 
 The input file is a file of reads in any format that is supported by ADAM.
 The output file will be a parquet file containing the corrected reads. The parquet file can also be outputted in any format that Adam supports. For more information on ADAM input/outputs, please see: https://github.com/meghanaravikumar/adam/blob/master/README.md 
